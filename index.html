@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLORA RADIO STATION</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1f3b4d, #1abc9c);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.1);
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 1.1em;
+            margin: 10px 0;
+            width: 200px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+        }
+
+        input {
+            text-align: center;
+        }
+
+        select {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message-box {
+            border: 2px solid #fff;
+            padding: 20px;
+            width: 300px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1.5em;
+        }
+
+        #soundPage {
+            margin-top: 20px;
+        }
+
+        /* تحسين التحولات */
+        input, select, button {
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الصفحة الرئيسية -->
+    <div id="mainPage">
+        <h1>GLORA RADIO STATION</h1>
+        <button id="openFormPageBtn">ادخل تردد القمر الصناعي والإشارة</button>
+    </div>
+
+    <!-- صفحة إدخال التردد والإشارة -->
+    <div id="formPage" class="hidden">
+        <h1>أدخل تردد القمر الصناعي والإشارة</h1>
+        <label for="frequency">التردد:</label><br>
+        <input type="text" id="frequency" placeholder="أدخل التردد 11789"><br><br>
+        <label for="signal">نوع التردد:</label><br>
+        <select id="signal">
+            <option value="hz">hz</option>
+            <option value="nz">nz</option>
+            <option value="bz">bz</option>
+        </select><br><br>
+        <button id="submitFormBtn">موافق</button>
+    </div>
+
+    <!-- صفحة الصوت -->
+    <div id="soundPage" class="hidden">
+        <h1>تم فتح محطة الصوت</h1>
+        <div class="message-box" id="messageBox">أهلا بكم</div>
+    </div>
+
+    <!-- صوت في الخلفية -->
+    <audio id="backgroundSound" loop autoplay class="hidden">
+        <source src="sound.mp3" type="audio/mp3">
+        المتصفح الخاص بك لا يدعم تشغيل الصوت.
+    </audio>
+
+    <script>
+        const mainPage = document.getElementById('mainPage');
+        const formPage = document.getElementById('formPage');
+        const soundPage = document.getElementById('soundPage');
+        const openFormPageBtn = document.getElementById('openFormPageBtn');
+        const submitFormBtn = document.getElementById('submitFormBtn');
+        const frequencyInput = document.getElementById('frequency');
+        const signalSelect = document.getElementById('signal');
+        const backgroundSound = document.getElementById('backgroundSound');
+        const messageBox = document.getElementById('messageBox');
+
+        // الانتقال إلى صفحة إدخال التردد والإشارة
+        openFormPageBtn.addEventListener('click', () => {
+            mainPage.classList.add('hidden');
+            formPage.classList.remove('hidden');
+        });
+
+        // التحقق من القيم والانتقال إلى صفحة الصوت
+        submitFormBtn.addEventListener('click', () => {
+            const frequency = frequencyInput.value;
+            const signal = signalSelect.value;
+
+            if (frequency === '11789' && (signal === 'hz' || signal === 'nz' || signal === 'bz')) {
+                formPage.classList.add('hidden');
+                soundPage.classList.remove('hidden');
+                backgroundSound.play(); // تشغيل الصوت في الخلفية
+            } else {
+                alert("الرجاء إدخال التردد الصحيح واختيار الإشارة.");
+            }
+        });
+
+        // تغيير الرسائل في مربع الرسائل كل 5 ثوانٍ
+        const messages = ["أهلا بكم", "مرحبا بكم", "نورتونا", "يا هلا وعلا"];
+        let messageIndex = 0;
+
+        setInterval(() => {
+            messageBox.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+        }, 5000);
+    </script>
+
+</body>
+</html>
